@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze:*)",
+      "Read(//Users/boratzn/.claude/projects/**)",
+      "Bash(flutter pub *)"
+    ]
+  }
+}
