@@ -457,7 +457,11 @@ class _ExpiredBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.timer_off_rounded, color: Color(0xFFEF4444), size: 20),
+          const Icon(
+            Icons.timer_off_rounded,
+            color: Color(0xFFEF4444),
+            size: 20,
+          ),
           const SizedBox(width: 10),
           Text(
             'Başvuru süresi dolmuştur',
@@ -503,142 +507,142 @@ class _AppliedBanner extends StatelessWidget {
 }
 
 // ── Quick Info Grid ───────────────────────────────────────────────────
-class _QuickInfoGrid extends StatelessWidget {
-  final String location;
-  final String workType;
-  final String duration;
-  final String compensationType;
+// class _QuickInfoGrid extends StatelessWidget {
+//   final String location;
+//   final String workType;
+//   final String duration;
+//   final String compensationType;
 
-  const _QuickInfoGrid({
-    required this.location,
-    required this.workType,
-    required this.duration,
-    required this.compensationType,
-  });
+//   const _QuickInfoGrid({
+//     required this.location,
+//     required this.workType,
+//     required this.duration,
+//     required this.compensationType,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final items = <_InfoGridItem>[
-      if (location.isNotEmpty)
-        _InfoGridItem(
-          icon: Icons.location_on_outlined,
-          label: 'Konum',
-          value: location,
-          color: _kPrimary,
-        ),
-      if (workType.isNotEmpty)
-        _InfoGridItem(
-          icon: Icons.work_outline_rounded,
-          label: 'Çalışma Şekli',
-          value: workType,
-          color: const Color(0xFF4A90A4),
-        ),
-      if (duration.isNotEmpty)
-        _InfoGridItem(
-          icon: Icons.access_time_rounded,
-          label: 'Süre',
-          value: duration,
-          color: _kAccent,
-        ),
-      if (compensationType.isNotEmpty)
-        _InfoGridItem(
-          icon: Icons.payments_outlined,
-          label: 'Ücret',
-          value: compensationType,
-          color: _kSuccess,
-        ),
-    ];
+//   @override
+//   Widget build(BuildContext context) {
+//     final items = <_InfoGridItem>[
+//       if (location.isNotEmpty)
+//         _InfoGridItem(
+//           icon: Icons.location_on_outlined,
+//           label: 'Konum',
+//           value: location,
+//           color: _kPrimary,
+//         ),
+//       if (workType.isNotEmpty)
+//         _InfoGridItem(
+//           icon: Icons.work_outline_rounded,
+//           label: 'Çalışma Şekli',
+//           value: workType,
+//           color: const Color(0xFF4A90A4),
+//         ),
+//       if (duration.isNotEmpty)
+//         _InfoGridItem(
+//           icon: Icons.access_time_rounded,
+//           label: 'Süre',
+//           value: duration,
+//           color: _kAccent,
+//         ),
+//       if (compensationType.isNotEmpty)
+//         _InfoGridItem(
+//           icon: Icons.payments_outlined,
+//           label: 'Ücret',
+//           value: compensationType,
+//           color: _kSuccess,
+//         ),
+//     ];
 
-    if (items.isEmpty) return const SizedBox.shrink();
+//     if (items.isEmpty) return const SizedBox.shrink();
 
-    return GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 2.4,
-          children: items
-              .map(
-                (item) => Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: _kBorder),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(6),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: item.color.withAlpha(20),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(item.icon, size: 16, color: item.color),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              item.label,
-                              style: GoogleFonts.inter(
-                                fontSize: 10,
-                                color: _kTextSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              item.value,
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: _kTextPrimary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-        )
-        .animate()
-        .fade(duration: 400.ms, delay: 100.ms)
-        .slideY(begin: 0.06, end: 0);
-  }
-}
+//     return GridView.count(
+//           shrinkWrap: true,
+//           physics: const NeverScrollableScrollPhysics(),
+//           crossAxisCount: 2,
+//           mainAxisSpacing: 12,
+//           crossAxisSpacing: 12,
+//           childAspectRatio: 2.4,
+//           children: items
+//               .map(
+//                 (item) => Container(
+//                   padding: const EdgeInsets.symmetric(
+//                     horizontal: 14,
+//                     vertical: 10,
+//                   ),
+//                   decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(12),
+//                     border: Border.all(color: _kBorder),
+//                     boxShadow: [
+//                       BoxShadow(
+//                         color: Colors.black.withAlpha(6),
+//                         blurRadius: 8,
+//                         offset: const Offset(0, 2),
+//                       ),
+//                     ],
+//                   ),
+//                   child: Row(
+//                     children: [
+//                       Container(
+//                         width: 32,
+//                         height: 32,
+//                         decoration: BoxDecoration(
+//                           color: item.color.withAlpha(20),
+//                           borderRadius: BorderRadius.circular(8),
+//                         ),
+//                         child: Icon(item.icon, size: 16, color: item.color),
+//                       ),
+//                       const SizedBox(width: 10),
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Text(
+//                               item.label,
+//                               style: GoogleFonts.inter(
+//                                 fontSize: 10,
+//                                 color: _kTextSecondary,
+//                                 fontWeight: FontWeight.w500,
+//                               ),
+//                             ),
+//                             Text(
+//                               item.value,
+//                               style: GoogleFonts.inter(
+//                                 fontSize: 12,
+//                                 color: _kTextPrimary,
+//                                 fontWeight: FontWeight.w700,
+//                               ),
+//                               maxLines: 1,
+//                               overflow: TextOverflow.ellipsis,
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               )
+//               .toList(),
+//         )
+//         .animate()
+//         .fade(duration: 400.ms, delay: 100.ms)
+//         .slideY(begin: 0.06, end: 0);
+//   }
+// }
 
-class _InfoGridItem {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-  const _InfoGridItem({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-}
+// class _InfoGridItem {
+//   final IconData icon;
+//   final String label;
+//   final String value;
+//   final Color color;
+//   const _InfoGridItem({
+//     required this.icon,
+//     required this.label,
+//     required this.value,
+//     required this.color,
+//   });
+// }
 
 // ── Section Card ──────────────────────────────────────────────────────
 class _SectionCard extends StatelessWidget {

@@ -489,7 +489,7 @@ class SupabaseService {
         'title': title,
         'message': message,
         'type': type,
-        if (relatedId != null) 'related_id': relatedId,
+        if (relatedId != null) 'related_id': relatedId, // ignore: use_null_aware_elements
         'is_read': false,
       });
     } catch (e) {

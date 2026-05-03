@@ -1155,7 +1155,7 @@ class _RecentJobsSection extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.only(top: 12),
                   itemCount: jobs.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final job = jobs[index];
                     final isApplied =
@@ -1214,7 +1214,7 @@ class _SearchResultsSection extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: results.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final job = results[index];
                 final isApplied = AppTops.appliedJobsIds.contains(
