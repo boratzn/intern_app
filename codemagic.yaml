@@ -27,6 +27,14 @@ workflows:
       - name: .env Dosyasını Oluştur
         script: |
           echo $ENV_FILE_BASE64 | base64 --decode > .env
+      - name: Set up key.properties
+        script: |
+          cat <<EOF > "$CM_BUILD_DIR/android/key.properties"
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          storeFile=$CM_KEYSTORE_PATH
+          EOF
       - name: Set up local.properties
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
