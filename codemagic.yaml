@@ -21,6 +21,9 @@ workflows:
         GOOGLE_PLAY_TRACK: "internal"
       flutter: stable
     scripts:
+      - name: .env Dosyasını Oluştur
+        script: |
+          echo $ENV_FILE_BASE64 | base64 --decode > .env
       - name: Set up local.properties
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
