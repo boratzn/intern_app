@@ -1,17 +1,23 @@
 workflows:
-  android-workflow:
-    name: Android Workflow
+  android-internal-release:
+    name: Android Internal Release
     instance_type: mac_mini_m2
     max_build_duration: 120
-    working_directory: flutter/flutter-android-and-ios-yaml-demo-project
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*'
+          include: true
+      cancel_previous_builds: true
     environment:
       android_signing:
         - keystore_reference
       groups:
-        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS)
+        - google_play # Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       vars:
-        PACKAGE_NAME: "io.codemagic.flutteryaml" # <-- Put your package name here
-        GOOGLE_PLAY_TRACK: "alpha"
+        PACKAGE_NAME: "app.boratuzun.intern_app"
+        GOOGLE_PLAY_TRACK: "internal"
       flutter: stable
     scripts:
       - name: Set up local.properties
@@ -29,23 +35,21 @@ workflows:
         ignore_failure: true
       - name: Build AAB with Flutter
         script: |
-          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))
           flutter build appbundle --release \
             --build-name=1.0.$BUILD_NUMBER \
             --build-number=$BUILD_NUMBER
     artifacts:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
     publishing:
       email:
         recipients:
-          - user_1@example.com
-          - user_2@example.com
+          - developer3442@gmail.com
         notify:
           success: true
-          failure: false
+          failure: true
       google_play:
         credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
         track: $GOOGLE_PLAY_TRACK
-        submit_as_draft: true
+        submit_as_draft: false

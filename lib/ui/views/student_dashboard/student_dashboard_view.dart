@@ -33,9 +33,13 @@ class StudentDashboardView extends StackedView<StudentDashboardViewModel> {
 
     return Scaffold(
       backgroundColor: _kBg,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
+      body: RefreshIndicator(
+        onRefresh: () => viewModel.fetchRecentJobs(),
+        color: _kPrimary,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
           child: Column(
             children: [
               // ── Fixed Header ──────────────────────────────────────────────
@@ -64,6 +68,7 @@ class StudentDashboardView extends StackedView<StudentDashboardViewModel> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -1263,93 +1268,93 @@ class _EmptySearchState extends StatelessWidget {
   }
 }
 
-// ── Application Stats ─────────────────────────────────────────────────
-class _ApplicationStats extends StatelessWidget {
-  final StudentDashboardViewModel viewModel;
-  const _ApplicationStats({required this.viewModel});
+// // ── Application Stats ─────────────────────────────────────────────────
+// class _ApplicationStats extends StatelessWidget {
+//   final StudentDashboardViewModel viewModel;
+//   const _ApplicationStats({required this.viewModel});
 
-  @override
-  Widget build(BuildContext context) {
-    final total = viewModel.appliedJobs.length;
-    final pending = viewModel.appliedJobs.where((a) {
-      final s = a['status']?.toString().toLowerCase() ?? '';
-      return s == 'applied' || s == 'pending';
-    }).length;
-    final updated = viewModel.activeApplications.length;
+//   @override
+//   Widget build(BuildContext context) {
+//     final total = viewModel.appliedJobs.length;
+//     final pending = viewModel.appliedJobs.where((a) {
+//       final s = a['status']?.toString().toLowerCase() ?? '';
+//       return s == 'applied' || s == 'pending';
+//     }).length;
+//     final updated = viewModel.activeApplications.length;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _kBorder),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          _StatItem(value: '$total', label: 'Başvuru', color: _kPrimary),
-          _StatDivider(),
-          _StatItem(value: '$pending', label: 'Bekliyor', color: _kAccent),
-          _StatDivider(),
-          _StatItem(value: '$updated', label: 'Reddedildi', color: _kDanger),
-        ],
-      ),
-    ).animate().fade(duration: 400.ms).slideY(begin: 0.06, end: 0);
-  }
-}
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(16),
+//         border: Border.all(color: _kBorder),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withAlpha(10),
+//             blurRadius: 12,
+//             offset: const Offset(0, 4),
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         children: [
+//           _StatItem(value: '$total', label: 'Başvuru', color: _kPrimary),
+//           _StatDivider(),
+//           _StatItem(value: '$pending', label: 'Bekliyor', color: _kAccent),
+//           _StatDivider(),
+//           _StatItem(value: '$updated', label: 'Reddedildi', color: _kDanger),
+//         ],
+//       ),
+//     ).animate().fade(duration: 400.ms).slideY(begin: 0.06, end: 0);
+//   }
+// }
 
-class _StatItem extends StatelessWidget {
-  final String value;
-  final String label;
-  final Color color;
-  const _StatItem({
-    required this.value,
-    required this.label,
-    required this.color,
-  });
+// class _StatItem extends StatelessWidget {
+//   final String value;
+//   final String label;
+//   final Color color;
+//   const _StatItem({
+//     required this.value,
+//     required this.label,
+//     required this.color,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: _kTextSecondary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: Column(
+//         children: [
+//           Text(
+//             value,
+//             style: GoogleFonts.inter(
+//               fontSize: 26,
+//               fontWeight: FontWeight.bold,
+//               color: color,
+//             ),
+//           ),
+//           const SizedBox(height: 2),
+//           Text(
+//             label,
+//             style: GoogleFonts.inter(
+//               fontSize: 12,
+//               color: _kTextSecondary,
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _StatDivider extends StatelessWidget {
-  const _StatDivider();
+// class _StatDivider extends StatelessWidget {
+//   const _StatDivider();
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(width: 1, height: 36, color: _kBorder);
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(width: 1, height: 36, color: _kBorder);
+//   }
+// }
 
 // ── Section Title ─────────────────────────────────────────────────────
 class _SectionTitle extends StatelessWidget {
@@ -1822,30 +1827,30 @@ class _DeadlineBadge extends StatelessWidget {
 }
 
 // ── Shimmer States ────────────────────────────────────────────────────
-class _HorizontalShimmer extends StatelessWidget {
-  const _HorizontalShimmer();
+// class _HorizontalShimmer extends StatelessWidget {
+//   const _HorizontalShimmer();
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: 3,
-      itemBuilder: (_, __) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(
-          width: 220,
-          margin: const EdgeInsets.only(right: 14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//       scrollDirection: Axis.horizontal,
+//       padding: const EdgeInsets.symmetric(horizontal: 20),
+//       itemCount: 3,
+//       itemBuilder: (_, __) => Shimmer.fromColors(
+//         baseColor: Colors.grey.shade300,
+//         highlightColor: Colors.grey.shade100,
+//         child: Container(
+//           width: 220,
+//           margin: const EdgeInsets.only(right: 14),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(20),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _VerticalShimmer extends StatelessWidget {
   const _VerticalShimmer();

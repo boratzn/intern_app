@@ -30,6 +30,8 @@ class JobDetailView extends StackedView<JobDetailViewModel> {
     final categoryName = AppTops.categories
         .firstWhere((c) => c.id == job.categoryId)
         .categoryName;
+    final isExpired =
+        job.deadline != null && job.deadline!.isBefore(DateTime.now());
 
     return Scaffold(
       backgroundColor: _kBg,
@@ -79,13 +81,16 @@ class JobDetailView extends StackedView<JobDetailViewModel> {
                     20,
                     20,
                     20,
-                    viewModel.isApplied ? 24 : 130,
+                    viewModel.isApplied || isExpired ? 24 : 130,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Applied indicator
-                      if (viewModel.isApplied) ...[
+                      // Applied / expired indicator
+                      if (isExpired) ...[
+                        const _ExpiredBanner(),
+                        const SizedBox(height: 16),
+                      ] else if (viewModel.isApplied) ...[
                         _AppliedBanner(),
                         const SizedBox(height: 16),
                       ],
@@ -165,8 +170,12 @@ class JobDetailView extends StackedView<JobDetailViewModel> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 0,
-            child: _ApplyBar(viewModel: viewModel, context: context),
+            bottom: 10,
+            child: _ApplyBar(
+              viewModel: viewModel,
+              context: context,
+              isExpired: isExpired,
+            ),
           ),
         ],
       ),
@@ -430,6 +439,37 @@ class _HeaderChip extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ── Expired Banner ────────────────────────────────────────────────────
+class _ExpiredBanner extends StatelessWidget {
+  const _ExpiredBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEF4444).withAlpha(18),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFEF4444).withAlpha(60)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.timer_off_rounded, color: Color(0xFFEF4444), size: 20),
+          const SizedBox(width: 10),
+          Text(
+            'Başvuru süresi dolmuştur',
+            style: GoogleFonts.inter(
+              color: const Color(0xFFEF4444),
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fade(duration: 400.ms).slideY(begin: -0.2, end: 0);
   }
 }
 
@@ -845,13 +885,18 @@ class _ContactRow extends StatelessWidget {
 class _ApplyBar extends StatelessWidget {
   final JobDetailViewModel viewModel;
   final BuildContext context;
-  const _ApplyBar({required this.viewModel, required this.context});
+  final bool isExpired;
+  const _ApplyBar({
+    required this.viewModel,
+    required this.context,
+    required this.isExpired,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isApplied = viewModel.isApplied;
 
-    if (isApplied) return const SizedBox.shrink();
+    if (isApplied || isExpired) return const SizedBox.shrink();
 
     return Container(
       padding: EdgeInsets.fromLTRB(

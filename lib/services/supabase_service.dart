@@ -212,18 +212,21 @@ class SupabaseService {
     DateTime? deadline,
   }) async {
     _cachedRecentJobs = null;
-    await _supabase.from('job_listings').update({
-      'title': title,
-      'location': location,
-      'work_type': workType,
-      'compensation_type': compensationType,
-      'duration': duration,
-      'description': description,
-      'requirements': requirements,
-      'benefits': benefits,
-      'is_active': isActive,
-      'deadline': deadline?.toIso8601String(),
-    }).eq('id', jobId);
+    await _supabase
+        .from('job_listings')
+        .update({
+          'title': title,
+          'location': location,
+          'work_type': workType,
+          'compensation_type': compensationType,
+          'duration': duration,
+          'description': description,
+          'requirements': requirements,
+          'benefits': benefits,
+          'is_active': isActive,
+          'deadline': deadline?.toIso8601String(),
+        })
+        .eq('id', jobId);
   }
 
   Future<List<JobListing>> getRecentJobs({bool forceRefresh = false}) async {
@@ -235,6 +238,7 @@ class SupabaseService {
       final response = await _supabase
           .from('job_listings')
           .select('*, company_profiles(*)')
+          .eq('is_active', true)
           .order('created_at', ascending: false)
           .limit(10);
 
