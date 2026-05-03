@@ -126,20 +126,25 @@ class JobDetailView extends StackedView<JobDetailViewModel> {
                       ],
 
                       // Company description
-                      if (job.company?.description != null) ...[
-                        _SectionCard(
-                          icon: Icons.domain_rounded,
-                          iconColor: _kSuccess,
-                          title: 'Şirket Hakkında',
-                          child: _BodyText(text: job.company!.description!),
-                        ),
-                        const SizedBox(height: 12),
-                      ],
+                      _SectionCard(
+                        icon: Icons.domain_rounded,
+                        iconColor: _kSuccess,
+                        title: 'Şirket Hakkında',
+                        child:
+                            (job.company?.description != null &&
+                                job.company!.description!.isNotEmpty)
+                            ? _BodyText(text: job.company!.description!)
+                            : _EmptyInfoRow(
+                                message:
+                                    'Şirket hakkında bilgi bulunmamaktadır.',
+                              ),
+                      ),
+                      const SizedBox(height: 12),
 
                       // Contact phone
                       if (job.company?.contactPerson != null) ...[
                         _SectionCard(
-                          icon: Icons.phone_rounded,
+                          icon: Icons.email_outlined,
                           iconColor: const Color(0xFF8B5CF6),
                           title: 'İletişim',
                           child: _ContactRow(
@@ -368,6 +373,7 @@ class _HeroHeader extends StatelessWidget {
               // Quick chips
               Wrap(
                 spacing: 8,
+                runSpacing: 8,
                 children: [
                   if (location.isNotEmpty)
                     _HeaderChip(
@@ -679,6 +685,36 @@ class _BodyText extends StatelessWidget {
   }
 }
 
+// ── Empty Info Row ────────────────────────────────────────────────────
+class _EmptyInfoRow extends StatelessWidget {
+  final String message;
+  const _EmptyInfoRow({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(
+          Icons.info_outline_rounded,
+          size: 16,
+          color: _kTextSecondary,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            message,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              color: _kTextSecondary,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 // ── Requirement Chips ─────────────────────────────────────────────────
 class _RequirementChips extends StatelessWidget {
   final String requirements;
@@ -794,51 +830,12 @@ class _ContactRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFF8B5CF6).withAlpha(12),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF8B5CF6).withAlpha(40)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: const Color(0xFF8B5CF6).withAlpha(20),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.phone_rounded,
-              color: Color(0xFF8B5CF6),
-              size: 18,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Telefon',
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  color: _kTextSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                phone,
-                style: GoogleFonts.inter(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: _kTextPrimary,
-                ),
-              ),
-            ],
-          ),
-        ],
+    return Text(
+      phone,
+      style: GoogleFonts.inter(
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
+        color: _kTextPrimary,
       ),
     );
   }

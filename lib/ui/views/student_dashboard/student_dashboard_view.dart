@@ -47,109 +47,21 @@ class StudentDashboardView extends StackedView<StudentDashboardViewModel> {
               ),
 
               // ── Body ────────────────────────────────────────────────────
-              if (viewModel.isSearchActive)
-                _SearchResultsSection(viewModel: viewModel)
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Category filter chips
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: _CategoryChipsBar(viewModel: viewModel),
-                    ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Category filter chips — always visible
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: _CategoryChipsBar(viewModel: viewModel),
+                  ),
 
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       // Application stats (only if has applications)
-                    //       if (viewModel.appliedJobs.isNotEmpty) ...[
-                    //         _ApplicationStats(viewModel: viewModel),
-                    //         const SizedBox(height: 16),
-                    //       ],
-
-                    //       const _SectionTitle(
-                    //         title: 'Senin İçin Seçtik',
-                    //         subtitle: 'AI profiline uygun ilanları belirledi',
-                    //         icon: Icons.auto_awesome_rounded,
-                    //         iconColor: _kAccent,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // const SizedBox(height: 16),
-
-                    // // AI cards — horizontal scroll
-                    // SizedBox(
-                    //   height: 185,
-                    //   child: viewModel.isBusy
-                    //       ? const _HorizontalShimmer()
-                    //       : viewModel.aiSuggestions.isEmpty
-                    //       ? const _EmptyHorizontal()
-                    //       : ListView.builder(
-                    //           scrollDirection: Axis.horizontal,
-                    //           padding: const EdgeInsets.symmetric(
-                    //             horizontal: 20,
-                    //           ),
-                    //           itemCount: viewModel.aiSuggestions.length,
-                    //           itemBuilder: (context, index) {
-                    //             final s = viewModel.aiSuggestions[index];
-                    //             return GestureDetector(
-                    //               onTap: () =>
-                    //                   viewModel.navigateToJobDetailMap(s),
-                    //               child: _AiSuggestionCard(
-                    //                 suggestion: s,
-                    //                 index: index,
-                    //               ),
-                    //             );
-                    //           },
-                    //         ),
-                    // ),
-                    const SizedBox(height: 12),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: _SectionTitle(
-                        title: 'Son Eklenenler',
-                        subtitle: 'En güncel staj fırsatları',
-                        icon: Icons.local_fire_department_rounded,
-                        iconColor: _kDanger,
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: viewModel.isBusy && viewModel.recentJobs.isEmpty
-                          ? const _VerticalShimmer()
-                          : viewModel.recentJobs.isEmpty
-                          ? const _EmptyState()
-                          : ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(top: 12),
-                              itemCount: viewModel.recentJobs.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(height: 12),
-                              itemBuilder: (context, index) {
-                                final job = viewModel.recentJobs[index];
-                                final isApplied = AppTops.appliedJobsIds
-                                    .contains(job.id.toString());
-                                return GestureDetector(
-                                  onTap: () =>
-                                      viewModel.navigateToJobDetail(job),
-                                  child: _JobListingCard(
-                                    job: job,
-                                    index: index,
-                                    isApplied: isApplied,
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                  ],
-                ),
+                  if (viewModel.isSearchActive)
+                    _SearchResultsSection(viewModel: viewModel)
+                  else
+                    _RecentJobsSection(viewModel: viewModel),
+                ],
+              ),
             ],
           ),
         ),
@@ -1195,6 +1107,67 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
       default:
         return 0;
     }
+  }
+}
+
+// ── Recent Jobs Section ───────────────────────────────────────────────
+class _RecentJobsSection extends StatelessWidget {
+  final StudentDashboardViewModel viewModel;
+  const _RecentJobsSection({required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
+    final isCategoryFiltered = viewModel.selectedCategory != 'Tümü';
+    final jobs = isCategoryFiltered ? viewModel.filteredJobs : viewModel.recentJobs;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: _SectionTitle(
+            title: isCategoryFiltered
+                ? viewModel.selectedCategory
+                : 'Son Eklenenler',
+            subtitle: isCategoryFiltered
+                ? '${jobs.length} ilan bulundu'
+                : 'En güncel staj fırsatları',
+            icon: isCategoryFiltered
+                ? Icons.filter_list_rounded
+                : Icons.local_fire_department_rounded,
+            iconColor: isCategoryFiltered ? _kPrimary : _kDanger,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: viewModel.isBusy && viewModel.recentJobs.isEmpty
+              ? const _VerticalShimmer()
+              : jobs.isEmpty
+              ? const _EmptyState()
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(top: 12),
+                  itemCount: jobs.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final job = jobs[index];
+                    final isApplied =
+                        AppTops.appliedJobsIds.contains(job.id.toString());
+                    return GestureDetector(
+                      onTap: () => viewModel.navigateToJobDetail(job),
+                      child: _JobListingCard(
+                        job: job,
+                        index: index,
+                        isApplied: isApplied,
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
   }
 }
 

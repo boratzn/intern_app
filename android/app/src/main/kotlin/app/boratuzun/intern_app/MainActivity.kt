@@ -1,4 +1,4 @@
-package com.example.intern_app
+package app.boratuzun.intern_app
 
 import io.flutter.embedding.android.FlutterActivity
 

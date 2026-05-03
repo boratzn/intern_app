@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:617572197765:android:ea2aed2e49cd451aca50ec",
+        "android_client_info": {
+          "package_name": "app.boratuzun.intern_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6pSWLI0kzAPwxZQewPeUSHu-zuofJUL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:617572197765:android:517b6cf40e395595ca50ec",
         "android_client_info": {
           "package_name": "com.example.intern_app"
