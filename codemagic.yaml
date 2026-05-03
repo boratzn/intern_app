@@ -1,4 +1,8 @@
 workflows:
+  workflow-name:
+    environment:
+      groups:
+        - staj_bul_env
   android-internal-release:
     name: Android Internal Release
     instance_type: mac_mini_m2
@@ -15,7 +19,6 @@ workflows:
         - keystore_reference
       groups:
         - google_play # Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        - staj_bul_env
       vars:
         PACKAGE_NAME: "app.boratuzun.intern_app"
         GOOGLE_PLAY_TRACK: "internal"
